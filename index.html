@@ -787,7 +787,6 @@ function initTraceCanvas(){
   canvas.onpointermove = e=>{ if(!drawing) return; const [x,y]=pos(e,canvas); traceCtx.lineTo(x,y); traceCtx.strokeStyle='#7a5fb5'; traceCtx.lineWidth=6; traceCtx.lineCap='round'; traceCtx.stroke(); };
   window.addEventListener('pointerup', ()=>drawing=false);
 }
-}
 function pos(e,canvas){
   const rect = canvas.getBoundingClientRect();
   return [(e.clientX-rect.left), (e.clientY-rect.top)];
@@ -955,7 +954,6 @@ function initWriteCanvas(){
   canvas.onpointerdown = e=>{ writeDrawing=true; writeCtx.beginPath(); writeCtx.moveTo(...writePos(e,canvas)); };
   canvas.onpointermove = e=>{ if(!writeDrawing) return; const [x,y]=writePos(e,canvas); writeCtx.lineTo(x,y); writeCtx.strokeStyle='#7a5fb5'; writeCtx.lineWidth=7; writeCtx.lineCap='round'; writeCtx.stroke(); };
   window.addEventListener('pointerup', ()=>writeDrawing=false);
-}
 }
 function writePos(e,canvas){
   const rect = canvas.getBoundingClientRect();
