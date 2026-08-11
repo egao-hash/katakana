@@ -772,14 +772,21 @@ function completeLearnCard(){
 let traceCtx, drawing=false;
 function initTraceCanvas(){
   const canvas = document.getElementById('traceCanvas');
-  canvas.width = canvas.clientWidth * 2;
-  canvas.height = canvas.clientHeight * 2;
-  traceCtx = canvas.getContext('2d');
-  traceCtx.scale(2,2);
-  drawGuide();
+  requestAnimationFrame(()=>{
+    const w = canvas.clientWidth, h = canvas.clientHeight;
+    if(!w || !h){ requestAnimationFrame(()=>initTraceCanvas()); return; }
+    const dpr = window.devicePixelRatio || 2;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    traceCtx = canvas.getContext('2d');
+    traceCtx.setTransform(1,0,0,1,0,0);
+    traceCtx.scale(dpr, dpr);
+    drawGuide();
+  });
   canvas.onpointerdown = e=>{ drawing=true; traceCtx.beginPath(); traceCtx.moveTo(...pos(e,canvas)); };
   canvas.onpointermove = e=>{ if(!drawing) return; const [x,y]=pos(e,canvas); traceCtx.lineTo(x,y); traceCtx.strokeStyle='#7a5fb5'; traceCtx.lineWidth=6; traceCtx.lineCap='round'; traceCtx.stroke(); };
   window.addEventListener('pointerup', ()=>drawing=false);
+}
 }
 function pos(e,canvas){
   const rect = canvas.getBoundingClientRect();
@@ -934,14 +941,21 @@ function drawWriteHeader(){
 }
 function initWriteCanvas(){
   const canvas = document.getElementById('writeCanvas');
-  canvas.width = canvas.clientWidth * 2;
-  canvas.height = canvas.clientHeight * 2;
-  writeCtx = canvas.getContext('2d');
-  writeCtx.scale(2,2);
-  drawWriteGuide();
+  requestAnimationFrame(()=>{
+    const w = canvas.clientWidth, h = canvas.clientHeight;
+    if(!w || !h){ requestAnimationFrame(()=>initWriteCanvas()); return; }
+    const dpr = window.devicePixelRatio || 2;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    writeCtx = canvas.getContext('2d');
+    writeCtx.setTransform(1,0,0,1,0,0);
+    writeCtx.scale(dpr, dpr);
+    drawWriteGuide();
+  });
   canvas.onpointerdown = e=>{ writeDrawing=true; writeCtx.beginPath(); writeCtx.moveTo(...writePos(e,canvas)); };
   canvas.onpointermove = e=>{ if(!writeDrawing) return; const [x,y]=writePos(e,canvas); writeCtx.lineTo(x,y); writeCtx.strokeStyle='#7a5fb5'; writeCtx.lineWidth=7; writeCtx.lineCap='round'; writeCtx.stroke(); };
   window.addEventListener('pointerup', ()=>writeDrawing=false);
+}
 }
 function writePos(e,canvas){
   const rect = canvas.getBoundingClientRect();
